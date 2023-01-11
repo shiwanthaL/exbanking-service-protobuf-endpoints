@@ -36,6 +36,17 @@ message GetBalanceResponse{
   int64 balance = 3;
 }
 
+message DepositRequest{
+  string fullName = 1;
+  int64 amount = 2;
+}
+
+message DepositResponse{
+  string fullName = 1;
+  int64 prior_amount = 2;
+  int64 current_balance = 3;
+}
+
 //======================= proto - utility payloads (data cleanup) ========================
 // Defines the data clean up request payload. for test automation purpose
 //========================================================================================
@@ -47,6 +58,7 @@ message GetUsersResponse{
 message CloseAccountRequest{
   string fullName = 1;
 }
+
 //========================= proto - bank services =======================================
 // Define the service contract. For our BankingService all end-point methods defined here
 // get_users : display all created user accounts details
@@ -55,8 +67,9 @@ message CloseAccountRequest{
 //=======================================================================================
 
 service BankingService{
-  rpc get_users(google.protobuf.Empty) returns (GetUsersResponse) {};
-  rpc close_account(CloseAccountRequest) returns (google.protobuf.Empty) {}
   rpc create_user(CreateUserRequest) returns (CreateUserResponse) {};
   rpc get_balance(GetBalanceRequest) returns (GetBalanceResponse) {};
+  rpc deposit(DepositRequest) returns (DepositResponse) {};
+  rpc get_users(google.protobuf.Empty) returns (GetUsersResponse) {};
+  rpc close_account(CloseAccountRequest) returns (google.protobuf.Empty) {}
 }
