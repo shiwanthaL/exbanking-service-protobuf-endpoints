@@ -1,0 +1,26 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "com.yolo.practical.bankingservice.proto";
+
+import "google/protobuf/empty.proto";
+
+
+message CreateUserRequest{
+  string fullName = 1;
+  string email = 2;
+  string passport = 3;
+}
+
+message CreateUserResponse{
+  string fullName = 1;
+  string accountNo = 2;
+  string ibanNo = 3;
+  string swiftCode = 4;
+  string bankName = 5;
+  string branchName = 6;
+  int64 balance = 7;
+}
+
+message GetUsersResponse{
+  repeated CreateUserResponse users = 1;
+}
