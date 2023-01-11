@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
-public class BankService extends BankingServiceGrpc.BankingServiceImplBase {
+public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     private Faker data;
     private final List<CreateUserResponse> accountHolders = new ArrayList<>();
 
