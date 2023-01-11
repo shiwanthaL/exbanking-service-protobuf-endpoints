@@ -17,7 +17,14 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     private Faker data;
     private final List<CreateUserResponse> accountHolders = new ArrayList<>();
 
-    public void create_user(CreateUserRequest request, StreamObserver<CreateUserResponse> response){
+    @Override
+    public void getUsers(Empty request, StreamObserver<GetUsersResponse> response) {
+        response.onNext(GetUsersResponse.newBuilder().addAllUsers(accountHolders).build());
+        response.onCompleted();
+    }
+
+    @Override
+    public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse> response) {
         CreateUserResponse createUser = CreateUserResponse.newBuilder().
 
                 setFullName(request.getFullName()).
@@ -32,11 +39,6 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
 
         accountHolders.add(createUser);
         response.onNext(createUser);
-        response.onCompleted();
-    }
-
-    public void get_users(Empty request, StreamObserver<GetUsersResponse> response){
-        response.onNext(GetUsersResponse.newBuilder().addAllUsers(accountHolders).build());
         response.onCompleted();
     }
 
