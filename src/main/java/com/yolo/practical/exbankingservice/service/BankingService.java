@@ -67,6 +67,20 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     }
 
     @Override
+    public void withdraw(WithdrawRequest request, StreamObserver<WithdrawResponse> response) {
+        long prior_amount = 0; long current_balance = 0;
+        if(accountHolders.get(0).getFullName().equals(request.getFullName())){
+            prior_amount = accountHolders.get(0).getBalance();
+            current_balance = accountHolders.get(0).getBalance() - request.getAmount();
+            //TODO (original object need to update accordingly)
+        }
+        WithdrawResponse withdraw = WithdrawResponse.newBuilder().
+                setFullName(request.getFullName()).setPriorAmount(prior_amount).setCurrentBalance(current_balance).build();
+        response.onNext(withdraw);
+        response.onCompleted();
+    }
+
+    @Override
     public void getUsers(Empty request, StreamObserver<GetUsersResponse> response) {
         response.onNext(GetUsersResponse.newBuilder().addAllUsers(accountHolders).build());
         response.onCompleted();
