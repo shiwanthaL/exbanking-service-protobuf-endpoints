@@ -26,17 +26,37 @@ message CreateUserResponse{
   string passport = 9;
 }
 
+message GetBalanceRequest{
+  string fullName = 1;
+}
+
+message GetBalanceResponse{
+  string fullName = 1;
+  string accountNo = 2;
+  int64 balance = 3;
+}
+
+//======================= proto - utility payloads (data cleanup) ========================
+// Defines the data clean up request payload. for test automation purpose
+//========================================================================================
+
 message GetUsersResponse{
   repeated CreateUserResponse users = 1;
 }
 
+message CloseAccountRequest{
+  string fullName = 1;
+}
 //========================= proto - bank services =======================================
 // Define the service contract. For our BankingService all end-point methods defined here
 // get_users : display all created user accounts details
 // create_user : create new bank account for specific customer
+// get_balance : display user available saving amount
 //=======================================================================================
 
 service BankingService{
   rpc get_users(google.protobuf.Empty) returns (GetUsersResponse) {};
+  rpc close_account(CloseAccountRequest) returns (google.protobuf.Empty) {}
   rpc create_user(CreateUserRequest) returns (CreateUserResponse) {};
+  rpc get_balance(GetBalanceRequest) returns (GetBalanceResponse) {};
 }
