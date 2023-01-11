@@ -22,6 +22,8 @@ message CreateUserResponse{
   string bankName = 5;
   string branchName = 6;
   int64 balance = 7;
+  string email = 8;
+  string passport = 9;
 }
 
 message GetUsersResponse{
