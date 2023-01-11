@@ -4,6 +4,9 @@ option java_package = "com.yolo.practical.bankingservice.proto";
 
 import "google/protobuf/empty.proto";
 
+//======================= proto - bank req, res payloads =================================
+// Defines the request payload. Here each attribute that goes into the message is defined
+//========================================================================================
 
 message CreateUserRequest{
   string fullName = 1;
@@ -23,4 +26,15 @@ message CreateUserResponse{
 
 message GetUsersResponse{
   repeated CreateUserResponse users = 1;
+}
+
+//========================= proto - bank services =======================================
+// Define the service contract. For our BankingService all end-point methods defined here
+// get_users : display all created user accounts details
+// create_user : create new bank account for specific customer
+//=======================================================================================
+
+service BankingService{
+  rpc get_users(google.protobuf.Empty) returns (GetUsersResponse) {};
+  rpc create_user(CreateUserRequest) returns (CreateUserResponse) {};
 }
