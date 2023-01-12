@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 // Defines the request payload. Here each attribute that goes into the message is defined
 //========================================================================================
 
+// ==== CREATE PROTOBUF =======
 message CreateUserRequest{
   string fullName = 1;
   string email = 2;
@@ -26,6 +27,7 @@ message CreateUserResponse{
   string passport = 9;
 }
 
+// ==== BALANCE PROTOBUF ======
 message GetBalanceRequest{
   string fullName = 1;
 }
@@ -36,6 +38,7 @@ message GetBalanceResponse{
   int64 balance = 3;
 }
 
+// ==== DEPOSIT PROTOBUF ======
 message DepositRequest{
   string fullName = 1;
   int64 amount = 2;
@@ -47,6 +50,7 @@ message DepositResponse{
   int64 current_balance = 3;
 }
 
+// ==== WITHDRAW PROTOBUF ======
 message WithdrawRequest{
   string fullName = 1;
   int64 amount = 2;
@@ -58,6 +62,7 @@ message WithdrawResponse{
   int64 current_balance = 3;
 }
 
+// ==== SEND PROTOBUF ==========
 message SendRequest{
   string fullName = 1;
   string sender_account = 2;

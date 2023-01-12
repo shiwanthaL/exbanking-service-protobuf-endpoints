@@ -9,14 +9,22 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
+/**
+ * Banking Server Protobuf Service
+ * Service end points has defined as per assignment request and additional 2 endpoints defined for test automation data cleanup
+ */
 @GrpcService
 public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     private Faker data = new Faker();
     private final List<CreateUserResponse> accountHolders = new ArrayList<>();
     private com.google.protobuf.Empty Empty;
 
+    /**
+     * Define rpc endpoint for create user account service call from server side
+     * @param request
+     * @param response
+     */
     @Override
     public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse> response) {
 
@@ -38,6 +46,11 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     }
 
 
+    /**
+     * Define rpc endpoint for get balance details for given customer
+     * @param request
+     * @param response
+     */
     @Override
     public void getBalance(GetBalanceRequest request, StreamObserver<GetBalanceResponse> response) {
         String account_no = null; long balance=0;
@@ -51,6 +64,11 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
         response.onCompleted();
     }
 
+    /**
+     * Define rpc endpoint for customer deposit to own account
+     * @param request
+     * @param response
+     */
     @Override
     public void deposit(DepositRequest request, StreamObserver<DepositResponse> response) {
         long prior_amount = 0; long current_balance = 0;
@@ -66,6 +84,11 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
 
     }
 
+    /**
+     * Define rpc endpoint for customer withdraw from own account
+     * @param request
+     * @param response
+     */
     @Override
     public void withdraw(WithdrawRequest request, StreamObserver<WithdrawResponse> response) {
         long prior_amount = 0; long current_balance = 0;
@@ -80,6 +103,11 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
         response.onCompleted();
     }
 
+    /**
+     * Defien rpc endpoint for money transfer to another account
+     * @param request
+     * @param response
+     */
     @Override
     public void send(SendRequest request, StreamObserver<SendResponse> response) {
         long prior_amount = 0; long current_balance = 0;
@@ -92,18 +120,28 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
         SendResponse send = SendResponse.newBuilder().
                 setFromAccount(accountHolders.get(0).getAccountNo()).
                 setBeneficiaryAccount(request.getSenderAccount()).
-                setTransactionRemark(request.getRemark()).setReferenceNo(data.idNumber()+"").
+                setTransactionRemark(request.getRemark()).setReferenceNo(data.number().numberBetween(1000,9999)+"REF").
                 setTransferAmount(request.getAmount()).setCurrentBalance(current_balance).build();
         response.onNext(send);
         response.onCompleted();
     }
 
+    /**
+     * Define endpoint for bank purpose to see all registered customers in bank
+     * @param request
+     * @param response
+     */
     @Override
     public void getUsers(Empty request, StreamObserver<GetUsersResponse> response) {
         response.onNext(GetUsersResponse.newBuilder().addAllUsers(accountHolders).build());
         response.onCompleted();
     }
 
+    /**
+     * Define endpoint for bank purpose to close requested customer account
+     * @param request
+     * @param response
+     */
     @Override
     public void closeAccount(CloseAccountRequest request, StreamObserver<Empty> response) {
         Iterator<CreateUserResponse> it_user = accountHolders.iterator();
