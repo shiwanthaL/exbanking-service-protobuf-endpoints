@@ -58,6 +58,20 @@ message WithdrawResponse{
   int64 current_balance = 3;
 }
 
+message SendRequest{
+  string fullName = 1;
+  string sender_account = 2;
+  int64 amount = 3;
+  string remark = 4;
+}
+
+message SendResponse{
+  string from_account = 1;
+  string beneficiary_account = 2;
+  string transaction_remark = 3;
+  string reference_no = 4;
+}
+
 //======================= proto - utility payloads (data cleanup) ========================
 // Defines the data clean up request payload. for test automation purpose
 //========================================================================================
@@ -85,6 +99,7 @@ service BankingService{
   rpc get_balance(GetBalanceRequest) returns (GetBalanceResponse) {};
   rpc deposit(DepositRequest) returns (DepositResponse) {};
   rpc withdraw(WithdrawRequest) returns (WithdrawResponse) {};
+  rpc send(SendRequest) returns (SendResponse) {};
   rpc get_users(google.protobuf.Empty) returns (GetUsersResponse) {};
   rpc close_account(CloseAccountRequest) returns (google.protobuf.Empty) {}
 }
