@@ -81,6 +81,24 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     }
 
     @Override
+    public void send(SendRequest request, StreamObserver<SendResponse> response) {
+        long prior_amount = 0; long current_balance = 0;
+        if(accountHolders.get(0).getFullName().equals(request.getFullName())){
+            prior_amount = accountHolders.get(0).getBalance();
+            current_balance = accountHolders.get(0).getBalance() - request.getAmount();
+            //TODO (throw error if transfer amount higher that available balance)
+            //TODO (original object need to update accordingly)
+        }
+        SendResponse send = SendResponse.newBuilder().
+                setFromAccount(accountHolders.get(0).getAccountNo()).
+                setBeneficiaryAccount(request.getSenderAccount()).
+                setTransactionRemark(request.getRemark()).setReferenceNo(data.idNumber()+"").
+                setTransferAmount(request.getAmount()).setCurrentBalance(current_balance).build();
+        response.onNext(send);
+        response.onCompleted();
+    }
+
+    @Override
     public void getUsers(Empty request, StreamObserver<GetUsersResponse> response) {
         response.onNext(GetUsersResponse.newBuilder().addAllUsers(accountHolders).build());
         response.onCompleted();

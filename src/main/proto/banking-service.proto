@@ -70,6 +70,8 @@ message SendResponse{
   string beneficiary_account = 2;
   string transaction_remark = 3;
   string reference_no = 4;
+  int64 transfer_amount = 5;
+  int64 current_balance = 6;
 }
 
 //======================= proto - utility payloads (data cleanup) ========================
