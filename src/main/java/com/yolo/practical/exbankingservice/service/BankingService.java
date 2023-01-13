@@ -5,6 +5,8 @@ import com.google.protobuf.Empty;
 import com.yolo.practical.bankingservice.proto.*;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,6 +22,7 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     private final List<CreateUserResponse> accountHolders = new ArrayList<>();
     private com.google.protobuf.Empty Empty;
 
+    Logger log = LoggerFactory.getLogger(BankingService.class);
     /**
      * Define rpc endpoint for create user account service call from server side
      * @param request
@@ -39,10 +42,13 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
                 setBankName(data.company().name()).
                 setBranchName(data.address().cityName()).
                 setBalance(data.number().numberBetween(10000,50000)).build();
-
+        log.info("Create response payload with account details : create_user endpoint");
         accountHolders.add(createUser);
+        log.info("Persist customer record in memory : create_user endpoint");
         response.onNext(createUser);
+        log.info("Create response and send to client : create_user endpoint");
         response.onCompleted();
+        log.info("Connection terminated from server side : create_user endpoint");
     }
 
 
@@ -57,11 +63,15 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
         if(accountHolders.get(0).getFullName().equals(request.getFullName())){
             account_no = accountHolders.get(0).getAccountNo();
             balance = accountHolders.get(0).getBalance();
+            log.info("Search and filter customer bank details : get_balance endpoint");
         }
         GetBalanceResponse getBalance = GetBalanceResponse.newBuilder().
                 setFullName(request.getFullName()).setAccountNo(account_no).setBalance(balance).build();
+        log.info("Create response payload with balance amount : get_balance endpoint");
         response.onNext(getBalance);
+        log.info("Create response and send to client : get_balance endpoint");
         response.onCompleted();
+        log.info("Connection terminated from server side : get_balance endpoint");
     }
 
     /**
@@ -76,12 +86,15 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
             prior_amount = accountHolders.get(0).getBalance();
             current_balance = accountHolders.get(0).getBalance() + request.getAmount();
             //TODO (original object need to update accordingly)
+            log.info("Search customer account and make deposit given amount : deposit endpoint");
         }
         DepositResponse deposit = DepositResponse.newBuilder().
                 setFullName(request.getFullName()).setPriorAmount(prior_amount).setCurrentBalance(current_balance).build();
+        log.info("Create response payload with deposit details : deposit endpoint");
         response.onNext(deposit);
+        log.info("Create response and send to client : deposit endpoint");
         response.onCompleted();
-
+        log.info("Connection terminated from server side : deposit endpoint");
     }
 
     /**
@@ -96,11 +109,15 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
             prior_amount = accountHolders.get(0).getBalance();
             current_balance = accountHolders.get(0).getBalance() - request.getAmount();
             //TODO (original object need to update accordingly)
+            log.info("Search customer account and make withdraw given amount : withdraw endpoint");
         }
         WithdrawResponse withdraw = WithdrawResponse.newBuilder().
                 setFullName(request.getFullName()).setPriorAmount(prior_amount).setCurrentBalance(current_balance).build();
+        log.info("Create response payload with withdraw details : withdraw endpoint");
         response.onNext(withdraw);
+        log.info("Create response and send to client : withdraw endpoint");
         response.onCompleted();
+        log.info("Connection terminated from server side : withdraw endpoint");
     }
 
     /**
@@ -116,14 +133,18 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
             current_balance = accountHolders.get(0).getBalance() - request.getAmount();
             //TODO (throw error if transfer amount higher that available balance)
             //TODO (original object need to update accordingly)
+            log.info("Search customer account and money transfer to given account : send endpoint");
         }
         SendResponse send = SendResponse.newBuilder().
                 setFromAccount(accountHolders.get(0).getAccountNo()).
                 setBeneficiaryAccount(request.getSenderAccount()).
                 setTransactionRemark(request.getRemark()).setReferenceNo(data.number().numberBetween(1000,9999)+"REF").
                 setTransferAmount(request.getAmount()).setCurrentBalance(current_balance).build();
+        log.info("Create response payload with transfer details : send endpoint");
         response.onNext(send);
+        log.info("Create response and send to client : send endpoint");
         response.onCompleted();
+        log.info("Connection terminated from server side : send endpoint");
     }
 
     /**
@@ -134,7 +155,9 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     @Override
     public void getUsers(Empty request, StreamObserver<GetUsersResponse> response) {
         response.onNext(GetUsersResponse.newBuilder().addAllUsers(accountHolders).build());
+        log.info("Search all account holders and display : users endpoint");
         response.onCompleted();
+        log.info("Connection terminated from server side : users endpoint");
     }
 
     /**
@@ -148,9 +171,11 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
         while (it_user.hasNext()){
             if(it_user.next().getFullName().equals(request.getFullName())){
                 it_user.remove();
+                log.info("Search account and close it : close_account endpoint");
             }
         }
         response.onNext(Empty);
         response.onCompleted();
+        log.info("Connection terminated from server side : close_account endpoint");
     }
 }
