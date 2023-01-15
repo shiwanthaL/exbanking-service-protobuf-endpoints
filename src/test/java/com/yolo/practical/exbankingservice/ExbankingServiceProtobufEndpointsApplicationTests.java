@@ -5,6 +5,7 @@ import com.yolo.practical.bankingservice.proto.CreateUserResponse;
 import com.yolo.practical.exbankingservice.repository.CreateUserRepository;
 import com.yolo.practical.exbankingservice.service.BankingService;
 import io.grpc.internal.testing.StreamRecorder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -25,6 +26,7 @@ class ExbankingServiceProtobufEndpointsApplicationTests {
 	@Mock
 	private CreateUserRepository mockCreateUserRepository;
 
+	@BeforeEach
 	public void setup(){
 		bankingService = new BankingService(mockCreateUserRepository);
 	}

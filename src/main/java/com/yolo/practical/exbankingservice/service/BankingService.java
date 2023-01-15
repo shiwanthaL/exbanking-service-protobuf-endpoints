@@ -34,21 +34,6 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
      */
     @Override
     public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse> response) {
-
-//        CreateUserResponse createUser = CreateUserResponse.newBuilder().
-//
-//                setFullName(request.getFullName()).
-//                setEmail(request.getEmail()).
-//                setPassport(request.getPassport()).
-//                setAccountNo(data.finance().creditCard()).
-//                setIbanNo(data.finance().iban()).
-//                setSwiftCode(data.address().cityPrefix()+data.number().digits(3)).
-//                setBankName(data.company().name()).
-//                setBranchName(data.address().cityName()).
-//                setBalance(data.number().numberBetween(10000,50000)).build();
-//        log.info("Create response payload with account details : create_user endpoint");
-//        accountHolders.add(createUser);
-
         CreateUserResponse createUser = createUserRepository.addAccount(request);
         accountHolders = createUserRepository.getAccount();
         log.info("Persist customer record in memory : create_user endpoint");
