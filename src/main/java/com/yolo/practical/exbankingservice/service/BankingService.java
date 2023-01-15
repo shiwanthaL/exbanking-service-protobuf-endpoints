@@ -3,7 +3,9 @@ package com.yolo.practical.exbankingservice.service;
 import com.github.javafaker.Faker;
 import com.google.protobuf.Empty;
 import com.yolo.practical.bankingservice.proto.*;
+import com.yolo.practical.exbankingservice.repository.CreateUserRepository;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +18,13 @@ import java.util.List;
  * Banking Server Protobuf Service
  * Service end points has defined as per assignment request and additional 2 endpoints defined for test automation data cleanup
  */
+@RequiredArgsConstructor
 @GrpcService
 public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     private Faker data = new Faker();
-    private final List<CreateUserResponse> accountHolders = new ArrayList<>();
+    private List<CreateUserResponse> accountHolders = new ArrayList<>();
     private com.google.protobuf.Empty Empty;
+    private final CreateUserRepository createUserRepository;
 
     Logger log = LoggerFactory.getLogger(BankingService.class);
     /**
@@ -31,19 +35,22 @@ public class BankingService extends BankingServiceGrpc.BankingServiceImplBase {
     @Override
     public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse> response) {
 
-        CreateUserResponse createUser = CreateUserResponse.newBuilder().
+//        CreateUserResponse createUser = CreateUserResponse.newBuilder().
+//
+//                setFullName(request.getFullName()).
+//                setEmail(request.getEmail()).
+//                setPassport(request.getPassport()).
+//                setAccountNo(data.finance().creditCard()).
+//                setIbanNo(data.finance().iban()).
+//                setSwiftCode(data.address().cityPrefix()+data.number().digits(3)).
+//                setBankName(data.company().name()).
+//                setBranchName(data.address().cityName()).
+//                setBalance(data.number().numberBetween(10000,50000)).build();
+//        log.info("Create response payload with account details : create_user endpoint");
+//        accountHolders.add(createUser);
 
-                setFullName(request.getFullName()).
-                setEmail(request.getEmail()).
-                setPassport(request.getPassport()).
-                setAccountNo(data.finance().creditCard()).
-                setIbanNo(data.finance().iban()).
-                setSwiftCode(data.address().cityPrefix()+data.number().digits(3)).
-                setBankName(data.company().name()).
-                setBranchName(data.address().cityName()).
-                setBalance(data.number().numberBetween(10000,50000)).build();
-        log.info("Create response payload with account details : create_user endpoint");
-        accountHolders.add(createUser);
+        CreateUserResponse createUser = createUserRepository.addAccount(request);
+        accountHolders = createUserRepository.getAccount();
         log.info("Persist customer record in memory : create_user endpoint");
         response.onNext(createUser);
         log.info("Create response and send to client : create_user endpoint");
