@@ -3,8 +3,8 @@
 ## Project Demo gRPC protobuf Exbank Service Endpoints
 
 <p align="center">
-  <a href="https://player.vimeo.com/video/789449287">
-    <img alt="Exbank gRPC (Service Endpoints) with K6" src="bin/img.png" width="100%" height="50%" />
+  <a href="https://vimeo.com/manage/videos/789541244">
+    <img alt="Exbank gRPC + Java (Service Endpoints)" src="bin/img.png" width="100%" height="50%" />
   </a>
 </p>
 
