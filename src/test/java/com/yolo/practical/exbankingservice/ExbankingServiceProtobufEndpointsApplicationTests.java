@@ -56,11 +56,16 @@ class ExbankingServiceProtobufEndpointsApplicationTests {
 		List<CreateUserResponse> results = responseObserver.getValues();
 		//Validate Unery calls always response single response at a time
 		assertEquals(1, results.size());
-
+		//Get saved response type object
 		CreateUserResponse userAccount = results.get(0);
 
 		assertEquals(userAccount.getFullName(), request.getFullName());
 		assertEquals(userAccount.getAccountNo(), "6304885392759266");
+		assertEquals(userAccount.getIbanNo(), "MT19PFST85193Ta8B3m8ip1B352V1G0");
+		assertEquals(userAccount.getSwiftCode(), "West135");
+		assertEquals(userAccount.getBankName(), "Trallia");
+		assertEquals(userAccount.getBranchName(), "Alichester");
+		assertEquals(userAccount.getBalance(), 34877);
 	}
 
 }
